@@ -1,0 +1,171 @@
+* {
+  all: unset;
+}
+
+window {
+  background: #333333;
+  color: #b4b4b4;
+  font-size: 14px;
+
+  & > * {
+    margin: 5px 5px 8px 11px;
+  }
+}
+
+.workspaces {
+  button {
+    background: none;
+    margin: 3px;
+    padding-left: 1px;
+    &.inactive {
+      color: #888974;
+    }
+    &.active {
+      color: #8ec07c;
+    }
+    &.occupied {
+      font-size: 1.01rem;
+    }
+    &.empty {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.segment-top {
+  margin-top: 0px;
+}
+
+.segment-bottom {
+  margin-bottom: 0px;
+}
+
+.volume-metric {
+  background-color: #1d2021;
+  color: #b4b4b4;
+  padding: 0;
+  border-radius: 8px;
+
+  slider {
+    all: unset;
+  }
+
+  scale trough highlight {
+    all: unset;
+    background-color: #00FFA9;
+  }
+  scale trough {
+    all: unset;
+    background-color: #1d2021;
+    min-width: 40px;
+  }
+}
+
+.cpu_metric {
+  color: #e0b089;
+}
+
+.memory_metric {
+  color: #afbea2;
+}
+
+.network_metric {
+  color: #d0d5f7;
+}
+
+.circular_metric {
+  background-color: #38384d;
+  border-radius: 10px;
+}
+
+.memory-icon {
+  font-size: 15px;
+  margin: 10px;
+  color: #afbea2;
+}
+
+.metric {
+  background-color: #1d2021;
+  padding: 5px 2px;
+  border-radius: 8px;
+}
+
+.metric-icon {
+  font-family: "Font Awesome 5 Free Solid", "Font Awesome 5 Free";
+  font-size: 1em;
+  margin: 10px 0;
+}
+
+.metric-battery {
+  font-family: "Hack Nerd Font";
+  font-size: 1.15em;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.metric-power {
+  margin: 5px 0;
+}
+
+.metric-date {
+  margin: 8px 0;
+}
+
+.time {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: #b4b4b4;
+  font-family: "GohuFont Nerd Font Mono";
+  font-weight: bold;
+}
+
+.music_popup {
+  all: unset;
+  background-color: #1d2021;
+  margin: 0;
+
+  & > * {
+    font-size: 1.1em;
+    font-family: 'Ubuntu';
+  }
+}
+
+.music_content {
+  padding: 20px 0 0 0;
+}
+
+.music_album_art {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 160px;
+  min-width: 160px;
+  margin: 20px 15px;
+  border-radius: 10px;
+}
+
+.music_control {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+.music_control_button {
+  font-size: 1.2em;
+  background-color: #333333;
+  min-width: 25px;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.music_title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.volume_popup {
+  all: unset;
+  background-color: #333333;
+  padding: 0px 10px;
+  margin: 0;
+}
