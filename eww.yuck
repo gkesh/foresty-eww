@@ -156,7 +156,7 @@
 (defpoll brightness_percent :interval "1s" :initial "0" "grun -sp | rev | cut -c 3- | rev")
 
 (defpoll battery_icon :interval "1s" :initial "0" "grun -pi")
-(defpoll battery_percent :interval "1s" :initial "0" "grun -pp | rev | cut -c 3- | rev")
+(defpoll battery_percent :interval "10s" :initial "0" "grun -pp | rev | cut -c 3- | rev")
 
 (defpoll hour :interval "1s" "date +%H")
 (defpoll min  :interval "1s" "date +%M")
