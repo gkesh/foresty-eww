@@ -204,7 +204,7 @@
 (defpoll music_data :interval "0.5s"
   :initial `{"status": ""}`
   `
-  playerctl metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}", "artUrl": "{{mpris:artUrl}}"}' || echo '{"status": ""}';
+  playerctl metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "album": "{{album}}", "title": "{{title}}", "artUrl": "{{mpris:artUrl}}"}' || echo '{"status": ""}';
   `)
 
 (defwidget music-popup []
