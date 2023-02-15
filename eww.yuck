@@ -84,7 +84,8 @@
          :vexpand "false" 
          :hexpand "false" 
          :space-evenly "true"
-         :tooltip "Mem: ${round(EWW_RAM.used_mem_perc, 0)}% | CPU: ${round(EWW_CPU.avg, 0)}% | AP: ${network_data.ap} (${network_data.strength}%)"
+         :tooltip "m: ${round(EWW_RAM.used_mem_perc, 0)}% | p: ${round(EWW_CPU.avg, 0)}% | w: ${network_data.ap} (${network_data.strength}%)"
+         ;:tooltip "Mem: ${round(EWW_RAM.used_mem_perc, 0)}% | CPU: ${round(EWW_CPU.avg, 0)}%"
          :spacing 8
 
       (circular-progress :value "${round(EWW_RAM.used_mem_perc, 0)}"
@@ -186,7 +187,7 @@
   (bar :screen 1))
 
 ; Wifi info
-(defpoll network_data :interval "1s"
+(defpoll network_data :interval "5s"
       :inital `{"ap": "N/A", "strength": "0"}`
       `
       ./scripts/wifi-info.sh || echo '{"ap": "N/A", "strength": "0"}'
@@ -278,13 +279,13 @@
       (scale :orientation "v" 
             :min 0
             :max 100 
-            :onchange "amixer sset Master {}%"
+            :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"
             :value volume))))
 
 (defwindow volume_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "1032px" :height "100px" :width "40px")
+  :geometry (geometry :x "50px" :y "1038px" :height "100px" :width "40px")
   (volume-popup))
 
 ; Brightness bar
