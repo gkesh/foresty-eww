@@ -36,7 +36,7 @@
 (defwidget music-button []
   (button :style "font-size: 1.2em"
           :onclick "playerctl play-pause"
-          :onrightclick "eww open music_popup"
+          :onrightclick "bash -c '[[ $(./scripts/window-status.sh -w music_popup) -eq 0 ]] && eww open music_popup || eww close music_popup'"
     "${music_data == "" ? "" : music_data.status == "Playing" ? "" : ""}"))
 
 (defwidget top [screen]
