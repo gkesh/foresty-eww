@@ -20,11 +20,15 @@
       (children))))
 
 (defwidget battery []
-  (box :class "metric"
-       :orientation "v"
-    (label :class "metric-icon metric-battery"
-           :text battery_icon)
-    (box :class "metric-content" battery_percent)))
+  (eventbox :onhover "bash -c '[[ $(./scripts/window-status.sh -w brightness_popup) -eq 1 ]] && eww close brightness_popup'"
+    (box :class "metric"
+        :orientation "v"
+      (label :class "metric-icon metric-battery"
+            :text battery_icon)
+      (box :class "metric-content" battery_percent)
+    )
+  )
+)
 
 (defwidget power []
   (box :class "metric"
@@ -79,33 +83,36 @@
 
 
 (defwidget system []
-		(box :orientation "v"
-         :class "metric" 
-         :vexpand "false" 
-         :hexpand "false" 
-         :space-evenly "true"
-         :tooltip "m: ${round(EWW_RAM.used_mem_perc, 0)}% | p: ${round(EWW_CPU.avg, 0)}% | w: ${network_data.ap} (${network_data.strength}%)"
-         ;:tooltip "Mem: ${round(EWW_RAM.used_mem_perc, 0)}% | CPU: ${round(EWW_CPU.avg, 0)}%"
-         :spacing 8
+  (eventbox :onhover "bash -c '[[ $(./scripts/window-status.sh -w volume_popup) -eq 1 ]] && eww close volume_popup'"
+    (box :orientation "v"
+          :class "metric" 
+          :vexpand "false" 
+          :hexpand "false" 
+          :space-evenly "true"
+          :tooltip "m: ${round(EWW_RAM.used_mem_perc, 0)}% | p: ${round(EWW_CPU.avg, 0)}% | w: ${network_data.ap} (${network_data.strength}%)"
+          ;:tooltip "Mem: ${round(EWW_RAM.used_mem_perc, 0)}% | CPU: ${round(EWW_CPU.avg, 0)}%"
+          :spacing 8
 
       (circular-progress :value "${round(EWW_RAM.used_mem_perc, 0)}"
-                         :class "circular_metric memory_metric"
-                         :thickness 4
+                          :class "circular_metric memory_metric"
+                          :thickness 4
         (label :style "font-size: 12px; margin: 10px; font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
-               :text ""))
+                :text ""))
 
       (circular-progress :value "${round(EWW_CPU.avg, 0)}"
-                         :class "circular_metric cpu_metric"
-                         :thickness 4
+                          :class "circular_metric cpu_metric"
+                          :thickness 4
         (label :style "font-size: 12px; margin-right: 5px; margin-top: 2px; font-family: 'Hack Nerd Font';"
-               :text ""))   
+                :text ""))   
 
       (circular-progress :value "${network_data.strength}"
-                         :class "circular_metric network_metric"
-                         :thickness 4
+                          :class "circular_metric network_metric"
+                          :thickness 4
         (label :style "font-size: 12px; margin: 0 10px; margin-top: 2px; font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
-               :text ""))  
-    ))
+                :text ""))  
+    )
+  )
+)
 
 (defwidget brightness []
   (box :class "volume-metric"
@@ -179,12 +186,12 @@
   :reserve (struts :distance "50px" :side "left")
   (bar :screen 0))
 
-(defwindow bar_2
-  :monitor "HDMI-1"
-  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
-  :anchor "top left"
-  :reserve (struts :distance "40px" :side "left")
-  (bar :screen 1))
+;(defwindow bar_2
+;  :monitor "HDMI-1"
+;  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
+;  :anchor "top left"
+;  :reserve (struts :distance "40px" :side "left")
+;  (bar :screen 1))
 
 ; Wifi info
 (defpoll network_data :interval "5s"
