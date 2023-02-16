@@ -197,7 +197,7 @@
 (defpoll network_data :interval "5s"
       :inital `{"ap": "N/A", "strength": "0"}`
       `
-      ./scripts/wifi-info.sh || echo '{"ap": "N/A", "strength": "0"}'
+      bash ./scripts/wifi-info.sh
       `)
 
 ; Music Widget
