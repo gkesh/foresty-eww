@@ -224,7 +224,7 @@
            :space-evenly "false"
            :spacing 10
 
-        (box :class "music_album_art" :vexpand "false" :hexpand "false" :style {music_data.status == "" ? "background-image: url('./assets/music_placeholder.png');": "background-image: url('${music_data.artUrl}');"})
+        (box :class "music_album_art" :vexpand "false" :hexpand "false" :style {music_data.artUrl == "" ? "background-image: url('./assets/music_placeholder.jpeg');": "background-image: url('${music_data.artUrl}');"})
         (box :class "music_content"
             :orientation "v"
             :spacing 0
@@ -243,14 +243,14 @@
               :spacing 10
               
               (label :class "metric-icon" :text "")
-              {music_data.status == "" ? "N/A": music_data.album == "null" ? "N/A": "${music_data.album}"})
+              {music_data.status == "" ? "N/A": music_data.album == "null" || music_data.album == "" ? "N/A": "${music_data.album}"})
           
           (box :orientation "h"
               :space-evenly "false"
               :spacing 10
               
               (label :class "metric-icon" :text "")
-              {music_data.status == "" ? "N/A": music_data.artist == "null" ? "N/A" : "${music_data.artist}"})
+              {music_data.status == "" ? "N/A": music_data.artist == "null" || music_data.artist == "" ? "N/A" : "${music_data.artist}"})
           
           (box :class "music_control"
               :orientation "h"
@@ -285,7 +285,8 @@
        :width 40
       (scale :orientation "v" 
             :min 0
-            :max 100 
+            :max 100
+            :flipped "true"
             :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"
             :value volume))))
 
@@ -307,7 +308,8 @@
        :width 40
       (scale :orientation "v"
             :min 0
-            :max 24241 
+            :max 24241
+            :flipped "true"
             :onchange "lux -S {}"
             :value brightness))))
 
