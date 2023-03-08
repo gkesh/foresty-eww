@@ -28,11 +28,16 @@ do
   activeWindows[$(echo $windowCount)]=$windowText
 done < <(wmctrl -l | awk '{ $1=$3=""; print $0 }')
 
-# printf "%s\n" "${!activeWindows[@]}" "${activeWindows[@]}" | pr -2t
-# printf "%s\n" "${!allWindows[@]}" "${allWindows[@]}" | pr -2t
+# To output the window string
+winString=''
 
 for idx in "${!activeWindows[@]}"
 do
   windowLabel=$((idx+1))
-  echo "$windowLabel ${allWindows[$idx]} ${activeWindows[$idx]}"
+  winString="$winString, { 'index': '$windowLabel', 'icon': '${allWindows[$idx]}', 'content': '${activeWindows[$idx]}' }"
 done
+
+winString=${winString:2}
+
+# Output workspaces
+echo "[$winString]"

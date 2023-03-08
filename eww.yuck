@@ -175,9 +175,6 @@
 (defpoll month    :interval "1h"  "date +%m")
 (defpoll year     :interval "1h"  "date +%y")
 
-(defvar workspaces_1_yuck "")
-(defvar workspaces_2_yuck "")
-
 (defwindow bar_1
   :monitor "eDP-1"
   :stacking "bg"
