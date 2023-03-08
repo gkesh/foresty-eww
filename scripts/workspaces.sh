@@ -30,3 +30,9 @@ done < <(wmctrl -l | awk '{ $1=$3=""; print $0 }')
 
 # printf "%s\n" "${!activeWindows[@]}" "${activeWindows[@]}" | pr -2t
 # printf "%s\n" "${!allWindows[@]}" "${allWindows[@]}" | pr -2t
+
+for idx in "${!activeWindows[@]}"
+do
+  windowLabel=$((idx+1))
+  echo "$windowLabel ${allWindows[$idx]} ${activeWindows[$idx]}"
+done
