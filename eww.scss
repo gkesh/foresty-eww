@@ -13,21 +13,19 @@ window {
 }
 
 .workspaces {
-  button {
-    background: none;
-    margin: 3px;
-    padding-left: 1px;
-    &.inactive {
-      color: #888974;
-    }
+  .workspace {
+    background-color: #333333;
+    padding: 5px 2px;
+    border-radius: 8px;
+
     &.active {
-      color: #8ec07c;
+      background: #1d2021;
     }
-    &.occupied {
-      font-size: 1.01rem;
-    }
-    &.empty {
-      font-size: 0.8rem;
+
+    .metric-workspace {
+      margin: 2px 0px 2px -2px;
+      font-size: 1.2em;
+      font-weight: bold;
     }
   }
 }
@@ -88,6 +86,10 @@ window {
   background-color: #1d2021;
   padding: 5px 2px;
   border-radius: 8px;
+
+  &.active {
+    color: #afbea2;
+  }
 }
 
 .metric-icon {
@@ -99,12 +101,17 @@ window {
 .metric-battery {
   font-family: "Hack Nerd Font";
   font-size: 1.15em;
-  margin-left: 10px;
+  margin-left: 0px;
   margin-bottom: 5px;
 }
 
-.metric-power {
+.metric-power, .metric-keyboard, .metric-app-drawer, .metric-bluetooth, .metric-workspace {
   margin: 5px 0;
+}
+
+.metric-keyboard, .metric-app-drawer, .metric-bluetooth, .metric-workspace {
+  margin: 2px 0px 2px -2px;
+  font-size: 1.4em;
 }
 
 .metric-date {
@@ -115,7 +122,7 @@ window {
   padding-top: 7px;
   padding-bottom: 7px;
   color: #b4b4b4;
-  font-family: "GohuFont Nerd Font Mono";
+  font-family: "Hack Nerd Font Mono";
   font-weight: bold;
 }
 
@@ -138,8 +145,8 @@ window {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 160px;
-  min-width: 160px;
+  min-height: 150px;
+  min-width: 150px;
   margin: 20px 15px;
   border-radius: 10px;
 }
@@ -161,6 +168,10 @@ window {
   font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.music_text {
+  margin: -5px 0;
 }
 
 .volume_popup {

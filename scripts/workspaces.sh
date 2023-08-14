@@ -1,43 +1,35 @@
 #!/bin/bash
 
-declare -A allWindows
-declare -A activeWindows
+get_workspace_metric() {
+  [[ $2 == "*" ]] && active_class="active" || active_class=""
+  echo "(box :class \"workspace $active_class\" (button :class \"metric-workspace $active_class\" :onclick \"wmctrl -s $1\" \"$3\"))"
+}
 
-currentlyOpen=""
+get_empty_workspace_metric() {
+  read -r count active name <<<$(wmctrl -d | grep "*" | awk '{ print $1 " " $2 " " $9 }' | sed -n "1p")
+  get_workspace_metric "$count" "$active" "$name"
+}
 
-# All windows
-while read -r window 
-do
-  windowCount=$(echo "$window" | awk '{ print $1 }')
-  windowState=$(echo "$window" | awk '{ print $2 }')
-  windowIcon=$(echo "$window" | awk '{ print $3 }')
+get_workspaces() {
+  if [[ $(wmctrl -l) != '' ]]; then
+    active_in_list=1
 
-  allWindows[$(echo $windowCount)]=$windowIcon
-
-  if [[ $windowState == '*' ]]; then
-    currentlyOpen=$windowCount
+    while read line; do
+      line=$((line + 1))
+      read -r count active name <<<$(wmctrl -d | awk '{ print $1 " " $2 " " $9 }' | sed -n "$(echo $line)p")
+      get_workspace_metric "$count" "$active" "$name"
+      if [[ $active == "*" ]]; then
+        active_in_list=0
+      fi
+    done < <(wmctrl -l | awk '{ print $2 }' | sort | uniq)
+    
+    if [[ $active_in_list -eq 1 ]]; then
+      get_empty_workspace_metric
+    fi
+  else
+    get_empty_workspace_metric
   fi
-done < <(wmctrl -d | awk '{ print $1 " " $2 " " substr($9, 7, 8) }' | grep -v NSP)
+  
+}
 
-# Active windows
-while read -r activeWindow
-do
-  windowCount=$(echo "$activeWindow" | awk '{ print $1 }')
-  windowText=$(echo "$activeWindow" | awk '{ $1=""; print $0 }')
-
-  activeWindows[$(echo $windowCount)]=$windowText
-done < <(wmctrl -l | awk '{ $1=$3=""; print $0 }')
-
-# To output the window string
-winString=''
-
-for idx in "${!activeWindows[@]}"
-do
-  windowLabel=$((idx+1))
-  winString="$winString, { 'index': '$windowLabel', 'icon': '${allWindows[$idx]}', 'content': '${activeWindows[$idx]}' }"
-done
-
-winString=${winString:2}
-
-# Output workspaces
-echo "[$winString]"
+echo '(box :orientation "v" :class "workspaces" :space-evenly true :hexpand true '"$(get_workspaces)"')'

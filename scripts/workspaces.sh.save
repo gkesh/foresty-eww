@@ -1,0 +1,7 @@
+#!/bin/bash
+
+get_workspaces() {
+  wmctrl -l | awk '{ print $2 }' | sort | uniq | while read line; do
+    
+  done
+}

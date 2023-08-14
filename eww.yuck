@@ -19,6 +19,10 @@
     (box :class "metric-content"
       (children))))
 
+(defwidget seperator []
+  (box (label :style "font-size: 1.3em; margin: 4px 0;" :text "󰇘"))
+)
+
 (defwidget battery []
   (eventbox :onhover "bash -c '[[ $(./scripts/window-status.sh -w brightness_popup) -eq 1 ]] && eww close brightness_popup'"
     (box :class "metric"
@@ -30,15 +34,38 @@
   )
 )
 
+(defwidget app-drawer []
+  (box :class "metric"
+    (button :class "metric-app-drawer"
+            :tooltip "Rofi Menu"
+            :timeout "10m"
+            :onclick "rofi -i -show drun -modi drun -show-icons"
+      "")))
+
 (defwidget power []
   (box :class "metric"
     (button :class "metric-icon metric-power"
             :tooltip "Rofi Power Menu"
-            :onclick "rofi -show p -modi p:$HOME/.rofi-power-menu"
+            :timeout "10m"
+            :onclick "rofi -show p -modi p:$HOME/.config/rofi/.rofi-power-menu"
       "")))
 
+(defwidget keyboard []
+  (box :class "metric"
+    (button :class "metric-keyboard"
+            :tooltip "Keyboard Backlight"
+            :onclick "/home/gkesh/.config/eww/scripts/toggle-keyboard.sh"
+      kbd_icon)))
+
+(defwidget bluetooth []
+  (box :class {bluetooth == 1 ? "metric active" : "metric"}
+    (button :class "metric-bluetooth"
+            :tooltip "bluetooth"
+            :onclick "/home/gkesh/.config/eww/scripts/toggle-bluetooth.sh"
+      bluetooth_icon)))
+
 (defwidget music-button []
-  (button :style "font-size: 1.2em"
+  (button :style "font-size: 1.1em"
           :onclick "playerctl play-pause"
           :onrightclick "bash -c '[[ $(./scripts/window-status.sh -w music_popup) -eq 0 ]] && eww open music_popup || eww close music_popup'"
     "${music_data == "" ? "" : music_data.status == "Playing" ? "" : ""}"))
@@ -46,12 +73,16 @@
 (defwidget top [screen]
   (box :orientation "v"
        :valign "start"
-       :space-evenly true
+       :space-evenly false
        :spacing "5"
+
+    (app-drawer)
 
     (metric :icon "" (music-button))
 
-    (workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck})  
+    (seperator)
+
+    (workspaces :wsp_yuck workspaces_1_yuck)  
   ))
 
 (defwidget workspaces [wsp_yuck]
@@ -68,6 +99,10 @@
        :valign "end"
        :space-evenly false
        :spacing "5"
+
+    (keyboard)
+
+    (bluetooth)
 
     (system)
 
@@ -147,7 +182,7 @@
         (label :class "metric-icon"
                 :style "font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
                 :text "")
-        (button :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+        (button :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
           "${volume}")))))
 
 (defwidget large-sym [sym]
@@ -159,12 +194,11 @@
        :class "metric-date" 
     day_word day month year))
 
-(defpoll volume :interval "1s" :initial "0" "grun -vv")
-(defpoll brightness :interval "1s" :initial "0" "lux -g")
-(defpoll brightness_percent :interval "1s" :initial "0" "grun -sp | rev | cut -c 3- | rev")
+(defpoll volume :interval "1s" :initial "0" 'zsh /home/gkesh/.config/eww/scripts/get-volume.sh')
+(defpoll brightness_percent :interval "1s" :initial "0" '/home/gkesh/.config/eww/scripts/get-brightness.sh')
 
-(defpoll battery_icon :interval "1s" :initial "0" "grun -pi")
-(defpoll battery_percent :interval "10s" :initial "0" "grun -pp | rev | cut -c 3- | rev")
+(defpoll battery_icon :interval "1s" :initial "0" '/home/gkesh/.config/eww/scripts/get-battery-icon.sh')
+(defpoll battery_percent :interval "10s" :initial "0" '/home/gkesh/.config/eww/scripts/get-battery.sh')
 
 (defpoll hour :interval "1s" "date +%H")
 (defpoll min  :interval "1s" "date +%M")
@@ -175,13 +209,16 @@
 (defpoll month    :interval "1h"  "date +%m")
 (defpoll year     :interval "1h"  "date +%y")
 
+(defvar bluetooth_icon "")
+(defvar kbd_icon "")
+(defvar bluetooth "")
 (defvar workspaces_1_yuck "")
 (defvar workspaces_2_yuck "")
 
 (defwindow bar_1
   :monitor "eDP-1"
   :stacking "bg"
-  :geometry (geometry :x -8 :y 8 :width "55px" :height "1424px")
+  :geometry (geometry :x -8 :y 8 :width "55px" :height "1584px")
   :anchor "top left"
   :reserve (struts :distance "50px" :side "left")
   (bar :screen 0))
@@ -197,7 +234,7 @@
 (defpoll network_data :interval "5s"
       :inital `{"ap": "N/A", "strength": "0"}`
       `
-      bash ./scripts/wifi-info.sh
+      bash /home/gkesh/.config/eww/scripts/wifi-info.sh
       `)
 
 ; Music Widget
@@ -240,6 +277,7 @@
 
           (box :orientation "h"
               :space-evenly "false"
+              :class "music_text"
               :spacing 10
               
               (label :class "metric-icon" :text "")
@@ -247,6 +285,7 @@
           
           (box :orientation "h"
               :space-evenly "false"
+              :class "music_text"
               :spacing 10
               
               (label :class "metric-icon" :text "")
@@ -269,7 +308,7 @@
 (defwindow music_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "8px" :height "180px" :width "560px")
+  :geometry (geometry :x "50px" :y "8px" :height "180px" :width "640px")
   
   (music-popup))
 
@@ -285,15 +324,15 @@
        :width 40
       (scale :orientation "v" 
             :min 0
-            :max 100
+            :max 100 
             :flipped "true"
-            :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%"
+            :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%"
             :value volume))))
 
 (defwindow volume_popup
   :monitor "eDP-1"
-  :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "1038px" :height "100px" :width "40px")
+  :anchor "bottom left" 
+  :geometry (geometry :x "50px" :y "1198px" :height "100px" :width "40px")
   (volume-popup))
 
 ; Brightness bar
@@ -308,13 +347,13 @@
        :width 40
       (scale :orientation "v"
             :min 0
-            :max 24241
+            :max 100
             :flipped "true"
-            :onchange "lux -S {}"
-            :value brightness))))
+            :onchange "light -S {}"
+            :value brightness_percent))))
 
 (defwindow brightness_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "1110px" :height "100px" :width "40px")
+  :geometry (geometry :x "50px" :y "1270px" :height "100px" :width "40px")
   (brighness-popup))
