@@ -261,7 +261,7 @@
            :space-evenly "false"
            :spacing 10
 
-        (box :class "music_album_art" :vexpand "false" :hexpand "false" :style {music_data.artUrl == null || music_data.artUrl == "" ? "background-image: url('./assets/music_placeholder.jpeg');": "background-image: url('${music_data.artUrl}');"})
+        (box :class "music_album_art" :vexpand "false" :hexpand "false" :style {music_data.status == "" || music_data.artUrl == "" ? "background-image: url('./assets/music_placeholder.jpeg');": "background-image: url('${music_data.artUrl}');"})
         (box :class "music_content"
             :orientation "v"
             :spacing 0
