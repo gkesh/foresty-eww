@@ -23,17 +23,6 @@
   (box (label :style "font-size: 1.3em; margin: 4px 0;" :text "󰇘"))
 )
 
-(defwidget battery []
-  (eventbox :onhover "bash -c '[[ $(./scripts/window-status.sh -w brightness_popup) -eq 1 ]] && eww close brightness_popup'"
-    (box :class "metric"
-        :orientation "v"
-      (label :class "metric-icon metric-battery"
-            :text battery_icon)
-      (box :class "metric-content" battery_percent)
-    )
-  )
-)
-
 (defwidget app-drawer []
   (box :class "metric"
     (button :class "metric-app-drawer"
@@ -110,8 +99,6 @@
 
     (brightness)
 
-    (battery)
-
     (box :class "metric" (date))
     
     (power)))
@@ -124,7 +111,7 @@
           :vexpand "false" 
           :hexpand "false" 
           :space-evenly "true"
-          :tooltip "m: ${round(EWW_RAM.used_mem_perc, 0)}% | p: ${round(EWW_CPU.avg, 0)}% | w: ${network_data.ap} (${network_data.strength}%)"
+          :tooltip "m: ${round(EWW_RAM.used_mem_perc, 0)}% | p: ${round(EWW_CPU.avg, 0)}% | b: ${battery_percent} % | w: ${network_data.ap} (${network_data.strength}%)"
           ;:tooltip "Mem: ${round(EWW_RAM.used_mem_perc, 0)}% | CPU: ${round(EWW_CPU.avg, 0)}%"
           :spacing 8
 
@@ -144,7 +131,13 @@
                           :class "circular_metric network_metric"
                           :thickness 4
         (label :style "font-size: 12px; margin: 0 10px; margin-top: 2px; font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
-                :text ""))  
+                :text ""))
+      
+      (circular-progress :value "${battery_percent}"
+                          :class "circular_metric battery_metric"
+                          :thickness 4
+        (label :style "font-size: 14px; margin: 0 10px;"
+                :text battery_icon))  
     )
   )
 )
