@@ -105,7 +105,7 @@
 
 
 (defwidget system []
-  (eventbox :onhover "bash -c '[[ $(./scripts/window-status.sh -w volume_popup) -eq 1 ]] && eww close volume_popup'"
+  (eventbox :onhover "eww close volume_popup"
     (box :orientation "v"
           :class "metric" 
           :vexpand "false" 
@@ -182,10 +182,11 @@
   (label :class "metric-icon large-symbol" :text sym))
 
 (defwidget date []
-  (box :orientation "v" 
-       :halign "center"
-       :class "metric-date" 
-    day_word day month year))
+  (eventbox :onhover "eww close brightness_popup"
+    (box :orientation "v" 
+         :halign "center"
+         :class "metric-date" 
+         day_word day month year)))
 
 (defpoll volume :interval "1s" :initial "0" 'zsh /home/gkesh/.config/eww/scripts/get-volume.sh')
 (defpoll brightness_percent :interval "1s" :initial "0" '/home/gkesh/.config/eww/scripts/get-brightness.sh')
@@ -211,7 +212,7 @@
 (defwindow bar_1
   :monitor "eDP-1"
   :stacking "bg"
-  :geometry (geometry :x -8 :y 8 :width "55px" :height "1584px")
+  :geometry (geometry :x -8 :y 4 :width "55px" :height "1592px")
   :anchor "top left"
   :reserve (struts :distance "50px" :side "left")
   (bar :screen 0))
@@ -325,7 +326,7 @@
 (defwindow volume_popup
   :monitor "eDP-1"
   :anchor "bottom left" 
-  :geometry (geometry :x "50px" :y "1198px" :height "100px" :width "40px")
+  :geometry (geometry :x "50px" :y "1285px" :height "100px" :width "40px")
   (volume-popup))
 
 ; Brightness bar
@@ -348,5 +349,5 @@
 (defwindow brightness_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "1270px" :height "100px" :width "40px")
+  :geometry (geometry :x "50px" :y "1365px" :height "100px" :width "40px")
   (brighness-popup))
