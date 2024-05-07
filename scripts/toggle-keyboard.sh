@@ -8,5 +8,5 @@ else
 	LED_BRIGHTNESS=$(($((CUR_BRIGHTNESS+1))*50))
 fi
 
-light -s sysfs/leds/asus::kbd_backlight -S $LED_BRIGHTNESS
+xbacklight -ctrl asus::kbd_backlight -set $LED_BRIGHTNESS
 eww update kbd_icon="$(/home/gkesh/.config/eww/scripts/get-keyboard-icon.sh)"

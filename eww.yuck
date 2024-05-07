@@ -49,15 +49,15 @@
 (defwidget bluetooth []
   (box :class {bluetooth == 1 ? "metric active" : "metric"}
     (button :class "metric-bluetooth"
-            :tooltip "bluetooth"
+            :tooltip "Bluetooth"
             :onclick "/home/gkesh/.config/eww/scripts/toggle-bluetooth.sh"
       bluetooth_icon)))
 
 (defwidget music-button []
-  (button :style "font-size: 1.1em"
+  (button :style "font-size: 1.5em"
           :onclick "playerctl play-pause"
           :onrightclick "bash -c '[[ $(./scripts/window-status.sh -w music_popup) -eq 0 ]] && eww open music_popup || eww close music_popup'"
-    "${music_data == "" ? "" : music_data.status == "Playing" ? "" : ""}"))
+    "${music_data == "" ? "" : music_data.status == "Playing" ? "󰏤" : "󰐊"}"))
 
 (defwidget top [screen]
   (box :orientation "v"
@@ -302,7 +302,7 @@
 (defwindow music_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "8px" :height "180px" :width "640px")
+  :geometry (geometry :x "60px" :y "8px" :height "180px" :width "640px")
   
   (music-popup))
 
@@ -343,7 +343,7 @@
             :min 0
             :max 100
             :flipped "true"
-            :onchange "light -S {}"
+            :onchange "xbacklight -set {}"
             :value brightness_percent))))
 
 (defwindow brightness_popup
