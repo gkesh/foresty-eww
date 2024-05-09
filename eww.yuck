@@ -130,13 +130,13 @@
       (circular-progress :value "${network_data.strength}"
                           :class "circular_metric network_metric"
                           :thickness 4
-        (label :style "font-size: 12px; margin: 0 10px; margin-top: 2px; font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
-                :text ""))
+        (label :style "font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free'; ${network_data.style}"
+                :text "${network_data.icon}"))
       
       (circular-progress :value "${battery_percent}"
                           :class "circular_metric battery_metric"
                           :thickness 4
-        (label :style "font-size: 14px; margin: 0 10px;"
+        (label :style "font-size: 15px; margin: 0 10px;"
                 :text battery_icon))  
     )
   )
