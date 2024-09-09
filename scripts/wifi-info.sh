@@ -1,6 +1,6 @@
 
 if [[ $(cat /sys/class/net/eno2/carrier) -eq 1 ]]; then
-   echo '{"ap": "Wired Connection", "strength": "100", "icon": "󰈀", "style": "font-size: 15px; margin-right: 3px;"}'
+   echo '{"ap": "Wired Connection", "strength": "100", "icon": "󰈀", "style": "font-size: 14px; margin-right: 2px;"}'
 elif [[  $(cat /sys/class/net/wlan0/carrier) -eq 0 ]]; then
    echo '{"ap": "N/A", "strength": "0", "icon": "", "style": "font-size: 14px;"}'
 else

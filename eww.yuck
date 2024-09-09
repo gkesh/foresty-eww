@@ -29,7 +29,7 @@
             :tooltip "Rofi Menu"
             :timeout "10m"
             :onclick "rofi -i -show drun -modi drun -show-icons"
-      "")))
+      "")))
 
 (defwidget power []
   (box :class "metric"
@@ -112,7 +112,6 @@
           :hexpand "false" 
           :space-evenly "true"
           :tooltip "m: ${round(EWW_RAM.used_mem_perc, 0)}% | p: ${round(EWW_CPU.avg, 0)}% | b: ${battery_percent} % | w: ${network_data.ap} (${network_data.strength}%)"
-          ;:tooltip "Mem: ${round(EWW_RAM.used_mem_perc, 0)}% | CPU: ${round(EWW_CPU.avg, 0)}%"
           :spacing 8
 
       (circular-progress :value "${round(EWW_RAM.used_mem_perc, 0)}"
