@@ -1,0 +1,74 @@
+; Music Widget
+(defpoll music_data :interval "0.5s"
+  :initial `{"status": ""}`
+  `
+  playerctl metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "album": "{{album}}", "title": "{{title}}", "artUrl": "{{mpris:artUrl}}"}' || echo '{"status": ""}';
+  `)
+
+(defwidget music-popup []
+  (box :halign "fill"
+       :vexpand "false"
+       :valign "fill"
+
+    (eventbox :onhoverlost "eww close music_popup"
+              :vexpand "false"
+              :valign "fill"
+              :hexpand "false"
+              :halign "fill"
+
+      (box :orientation "h" 
+           :valign "fill"
+           :vexpand "false"
+           :space-evenly "false"
+           :spacing 10
+
+        (box :class "music_album_art" :vexpand "false" :hexpand "false" :style {music_data.status == "" || music_data.artUrl == "" ? "background-image: url('./assets/music_placeholder.jpeg');": "background-image: url('${music_data.artUrl}');"})
+        (box :class "music_content"
+            :orientation "v"
+            :spacing 0
+            :space-evenly "false"
+            :vexpand "false"
+            :hexpand "false"
+            
+          (label :halign "start"
+                :class "music_title"
+                :wrap "true"
+                :limit-width 35
+                :text {music_data.status == "" ? "No music playing": "${music_data.title}"})
+
+          (box :orientation "h"
+              :space-evenly "false"
+              :class "music_text"
+              :spacing 10
+              
+              (label :class "metric-icon" :text "")
+              {music_data.status == "" ? "N/A": music_data.album == "null" || music_data.album == "" ? "N/A": "${music_data.album}"})
+          
+          (box :orientation "h"
+              :space-evenly "false"
+              :class "music_text"
+              :spacing 10
+              
+              (label :class "metric-icon" :text "")
+              {music_data.status == "" ? "N/A": music_data.artist == "null" || music_data.artist == "" ? "N/A" : "${music_data.artist}"})
+          
+          (box :class "music_control"
+              :orientation "h"
+              :space-evenly "true"
+              :halign "start"
+              :spacing 20
+              
+              (button :class "music_control_button" :onclick "playerctl previous" "")
+              
+              (button :class "music_control_button"
+                      :onclick "playerctl play-pause"
+                "${music_data == "" ? "" : music_data.status == "Playing" ? "" : ""}")
+                
+              (button :class "music_control_button" :onclick "playerctl next" "")))))))
+
+(defwindow music_popup
+  :monitor "eDP-1"
+  :anchor "bottom left"
+  :geometry (geometry :x "60px" :y "8px" :height "180px" :width "640px")
+  
+  (music-popup))

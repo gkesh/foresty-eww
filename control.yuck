@@ -1,0 +1,283 @@
+; (defwidget keyboard []
+;     (box :class "metric"
+;       (button :class "metric-keyboard"
+;               :tooltip "Keyboard Backlight"
+;               :onclick "/home/gkesh/.config/eww/scripts/toggle-keyboard.sh"
+;         kbd_icon)))
+
+(defvar kb_label "Keyboard")
+
+(defwidget control-popup []
+    (box :orientation "v" 
+        :halign "fill"
+        :valign "start"
+        :vexpand "false"
+        :hexpand "false"
+        :space-evenly "false"
+        :class "control-popup"
+        :spacing 24
+    
+        (eventbox :onhoverlost "eww close control_popup"
+            :vexpand "false"
+            :valign "fill"
+            :hexpand "false"
+            :halign "fill"
+
+            (box :orientation "h"
+                :valign "fill"
+                :vexpand "false"
+                :space-evenly "false"
+                :spacing 16
+            
+                ; Connections Boxes
+                (box :class "control-box"
+                    :tooltip "Enable/Disable Connections"
+                    :orientation "v"
+                    :space-evenly "false"
+                    :valign "fill"
+                    :vexpand "false"
+                    :spacing 24
+                    
+                    (eventbox
+                        :onrightclick ""
+                        :vexpand "false"
+                        :valign "fill"
+                        :hexpand "false"
+                        :halign "fill"
+                    
+                        (box :orientation "h" 
+                            :valign "fill"
+                            :vexpand "false"
+                            :space-evenly "false"
+                            :spacing 24
+                        
+                            (button :class "rounded-button"
+                                    :tooltip "Keyboard Backlight"
+                                    :onclick ""
+                                    (label :style "margin-left: -4px"
+                                            :text ""))
+
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "start"
+                                :hexpand "false"
+                                :space-evenly "false"
+                                :spacing 4
+                            
+                            (label :class "rounded-label"
+                                    :halign "start"
+                                    :text "WiFi/LAN")
+                            
+                            (label :class "rounded-sub-label"
+                                    :halign "start"
+                            :text "${network_data.ap}"))))
+
+                    (eventbox
+                        :onrightclick ""
+                        :vexpand "false"
+                        :valign "fill"
+                        :hexpand "false"
+                        :halign "fill"
+                    
+                        (box :orientation "h" 
+                            :valign "fill"
+                            :vexpand "false"
+                            :space-evenly "false"
+                            :spacing 24
+                        
+                            (button :class "rounded-button-thin"
+                                    :tooltip "Bluetooth"
+                                    :onclick ""
+                                    (label :text "󰂯"))
+
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "start"
+                                :hexpand "false"
+                                :space-evenly "false"
+                                :spacing 4
+                            
+                            (label :class "rounded-label"
+                                    :halign "start"
+                                    :text "Bluetooth")
+                            
+                            (label :class "rounded-sub-label"
+                                    :halign "start"
+                            :text "Disconnected"))))
+                    
+                    (eventbox
+                        :onrightclick ""
+                        :vexpand "false"
+                        :valign "fill"
+                        :hexpand "false"
+                        :halign "fill"
+                    
+                        (box :orientation "h" 
+                            :valign "fill"
+                            :vexpand "false"
+                            :space-evenly "false"
+                            :spacing 24
+                        
+                            (button :class "rounded-button-thin"
+                                    :tooltip "Airplane Mode"
+                                    :onclick ""
+                                    (label :text "󰀝"))
+
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "start"
+                                :hexpand "false"
+                                :space-evenly "false"
+                                :spacing 4
+                            
+                                (label :class "rounded-label"
+                                        :halign "start"
+                                        :text "Airplane Mode")
+                                
+                                (label :class "rounded-sub-label"
+                                        :halign "start"
+                                :text "Turned Off")))))
+                        
+                ; Keyboard & Screenshot
+                (box :orientation "v"
+                :valign "fill"
+                :vexpand "false"
+                :space-evenly "false"
+                :spacing 16
+
+                    (box :class "control-box"
+                        :tooltip "Keyboard Backlight"
+                        :space-evenly "false"
+                        :valign "fill"
+                        :vexpand "false"
+                        :spacing 18
+                    
+                        (eventbox
+                            :onrightclick ""
+                            :vexpand "false"
+                            :valign "fill"
+                            :hexpand "true"
+                            :halign "center"
+                        
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "center"
+                                :hexpand "true"
+                                :space-evenly "false"
+                                :spacing 4
+                                
+                                (label :class "large-icon"
+                                    :text "${kbd_icon}")
+                                
+                                (label :class "rounded-label"
+                                    :halign "center"
+                                    :text "${kb_label}"))))
+
+                    (box :class "control-box"
+                        :tooltip "Screenshot"
+                        :space-evenly "false"
+                        :valign "fill"
+                        :vexpand "false"
+                        :spacing 18
+                    
+                        (eventbox
+                            :onrightclick ""
+                            :vexpand "false"
+                            :valign "fill"
+                            :hexpand "true"
+                            :halign "center"
+                        
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "center"
+                                :hexpand "true"
+                                :space-evenly "false"
+                                :spacing 4
+                                
+                                (label :class "large-icon"
+                                    :style "margin-left: -4px"
+                                    :text "")
+                                
+                                (label :class "rounded-label"
+                                    :halign "center"
+                                    :text "Screenshot")))))
+                
+                ; Camera and Mic
+                (box :orientation "v"
+                :valign "fill"
+                :vexpand "false"
+                :space-evenly "false"
+                :spacing 16
+
+                    (box :class "control-box"
+                        :tooltip "Microphone"
+                        :space-evenly "false"
+                        :valign "fill"
+                        :vexpand "false"
+                        :spacing 18
+                    
+                        (eventbox
+                            :onrightclick ""
+                            :vexpand "false"
+                            :valign "fill"
+                            :hexpand "true"
+                            :halign "center"
+                        
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "center"
+                                :hexpand "true"
+                                :space-evenly "false"
+                                :spacing 4
+                                
+                                (label :class "large-icon"
+                                    :text "")
+                                
+                                (label :class "rounded-label"
+                                    :halign "center"
+                                    :text "Microphone"))))
+
+                    (box :class "control-box"
+                        :tooltip "Camera"
+                        :space-evenly "false"
+                        :valign "fill"
+                        :vexpand "false"
+                        :spacing 18
+                    
+                        (eventbox
+                            :onrightclick ""
+                            :vexpand "false"
+                            :valign "fill"
+                            :hexpand "true"
+                            :halign "center"
+                        
+                            (box :orientation "v" 
+                                :valign "center"
+                                :vexpand "false"
+                                :halign "center"
+                                :hexpand "true"
+                                :space-evenly "false"
+                                :spacing 4
+                                
+                                (label :class "large-icon"
+                                    :style "margin-left: -4px"
+                                    :text "󰄀")
+                                
+                                (label :class "rounded-label"
+                                    :halign "center"
+                                    :text "Camera")))))
+                ))))
+
+; Control Bar
+(defwindow control_popup
+    :monitor "eDP-1"
+    :anchor "bottom left"
+    :geometry (geometry :x "60px" :y "952px" :height "640px" :width "520px")
+  
+    (control-popup))
