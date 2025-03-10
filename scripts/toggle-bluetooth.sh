@@ -10,3 +10,4 @@ fi
 
 eww update bluetooth=$($HOME/.config/eww/scripts/get-bluetooth-status.sh)
 eww update bluetooth_icon=$($HOME/.config/eww/scripts/get-bluetooth-icon.sh)
+eww update bluetooth_text=$($HOME/.config/eww/scripts/get-bluetooth-text.sh)

@@ -14,6 +14,19 @@
          :class "segment-bottom" 
       (bottom :screen screen))))
 
+(defwidget bar_2 [screen]
+  (centerbox :orientation "v"
+    :class "bar_2"
+    (box :class "segment-top"
+          :valign "start"
+      (top_2 :screen screen))
+    (box :valign "center"
+          :class "middle" 
+      (middle :screen screen))
+    (box :valign "end"
+          :class "segment-bottom" 
+      (bottom_2 :screen screen))))
+
 (defwidget metric [icon ?font-size]
   (box :class "metric" 
        :orientation "v"
@@ -28,20 +41,24 @@
 )
 
 (defwidget app-drawer []
-  (box :class "metric"
-    (button :class "metric-app-drawer"
+  (box :class "hoverable-metric"
+    (eventbox :class "hoverable metric-app-drawer"
+            :cursor "pointer"
             :tooltip "Rofi Menu"
-            :timeout "10m"
-            :onclick "rofi -i -show drun -modi drun -show-icons"
-      "")))
+            ; :timeout "10m"
+            :onclick "rofi -i -show drun -modi drun -show-icons &"
+            (label :style "font-size: 16px;" :class "hoverable-label" :text ""))))
 
 (defwidget power []
-  (box :class "metric"
-    (button :class "metric-icon metric-power"
-            :tooltip "Rofi Power Menu"
-            :timeout "10m"
-            :onclick "rofi -show p -modi p:$HOME/.config/rofi/.rofi-power-menu"
-      "")))
+  (box :class "hoverable-metric"
+      :valign "fill"
+      :vexpand "true"
+    (eventbox :class "hoverable metric-icon metric-power"
+            ; :tooltip "Rofi Power Menu"
+            :vexpand "true"
+            :cursor "pointer"
+            :onclick "rofi -show p -modi p:$HOME/.config/rofi/.rofi-power-menu &"
+            (label :class "hoverable-label" :text ""))))
 
 (defwidget keyboard []
   (box :class "metric"
@@ -50,12 +67,16 @@
             :onclick "/home/gkesh/.config/eww/scripts/toggle-keyboard.sh"
       kbd_icon)))
 
-; (defwidget control []
-;   (box :class "metric"
-;     (button :class "metric-keyboard"
-;             :tooltip "Keyboard Backlight"
-;             :onclick "/home/gkesh/.config/eww/scripts/toggle-control.sh"
-;       kbd_icon)))
+(defwidget control []
+  (box :class "hoverable-metric"
+      :valign "fill"
+      :vexpand "true"
+    (eventbox :class "hoverable"
+            :cursor "pointer"
+            ; :tooltip "Control Center"
+            :vexpand "true"
+            :onclick "eww open control_popup"
+        (label :class "hoverable-label" :text "󰕮"))))
 
 (defwidget bluetooth []
   (box :class {bluetooth == 1 ? "metric active" : "metric"}
@@ -85,6 +106,19 @@
     (workspaces :wsp_yuck workspaces_1_yuck)  
   ))
 
+(defwidget top_2 [screen]
+  (box :orientation "v"
+        :valign "start"
+        :space-evenly false
+        :spacing "5"
+
+    (app-drawer)
+
+    (seperator)
+
+    (workspaces :wsp_yuck workspaces_1_yuck)  
+  ))
+
 (defwidget workspaces [wsp_yuck]
   (literal :content wsp_yuck))
 
@@ -100,9 +134,9 @@
        :space-evenly false
        :spacing "5"
 
-    (keyboard)
+    ;(keyboard)
 
-    (bluetooth)
+    ;(bluetooth)
 
     (system)
 
@@ -111,6 +145,18 @@
     (brightness)
 
     (box :class "metric" (date))
+
+    (control)
+    
+    (power)))
+
+(defwidget bottom_2 [screen] 
+  (box :orientation "v"
+        :valign "end"
+        :space-evenly false
+        :spacing "5"
+
+    (system)
     
     (power)))
 
@@ -158,17 +204,18 @@
        :space-evenly false
        :valign "fill"
        :vexpand false
-    (eventbox :onhover "eww close volume_popup; eww open brightness_popup"
+    (eventbox :onclick "eww close volume_popup; eww open brightness_popup"
               :vexpand true
               :valign "fill"
+              :cursor "pointer"
+              :class "hoverable"
       (box :orientation "v"
            :valign "fill"
            :vexpand true
         (label :class "metric-icon"
-                :style "font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
-                :text "")
-        (button :onclick ""
-          "${brightness_percent}")))))
+                :style "font-size: 20px; margin: 8px 0 5px -7px;"
+                :text "󱍖")
+        (label :class "metric-text" :text "${brightness_percent}")))))
 
 (defwidget volume []
   (box :class "volume-metric"
@@ -176,23 +223,27 @@
        :space-evenly false
        :valign "fill"
        :vexpand false
-    (eventbox :onhover "eww close brightness_popup; eww open volume_popup"
+    (eventbox :onclick "eww close brightness_popup; eww open volume_popup"
+              :onrightclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
               :vexpand true
               :valign "fill"
+              :cursor "pointer"
+              :class "hoverable"
       (box :orientation "v"
            :valign "fill"
            :vexpand true
         (label :class "metric-icon"
                 :style "font-family: 'Font Awesome 5 Free Solid', 'Font Awesome 5 Free';"
                 :text "")
-        (button :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-          "${volume}")))))
+        (label :class "metric-text" :text "${volume}")))))
 
 (defwidget large-sym [sym]
   (label :class "metric-icon large-symbol" :text sym))
 
 (defwidget date []
-  (eventbox :onhover "eww close brightness_popup"
+  (eventbox :onclick "eww open calendar_popup"
+            :cursor "pointer"
+            :class "hoverable"
     (box :orientation "v" 
          :halign "center"
          :class "metric-date" 
@@ -212,10 +263,14 @@
 (defpoll day      :interval "10m" "date +%d")
 (defpoll month    :interval "1h"  "date +%m")
 (defpoll year     :interval "1h"  "date +%y")
+(defpoll year_calendar     :interval "10m"  "date +%Y")
+(defpoll day_calendar      :interval "1h" '/home/gkesh/.config/eww/scripts/get-calendar-day.sh')
+
 
 (defvar bluetooth_icon "")
 (defvar kbd_icon "")
 (defvar bluetooth "")
+(defvar bluetooth_text "")
 (defvar workspaces_1_yuck "")
 (defvar workspaces_2_yuck "")
 
@@ -227,12 +282,12 @@
   :reserve (struts :distance "50px" :side "left")
   (bar :screen 0))
 
-; (defwindow bar_2
-;  :monitor "HDMI-1-0"
-;  :geometry (geometry :x 0 :y 4 :width "55px" :height "1072px")
-;  :anchor "top left"
-;  :reserve (struts :distance "50px" :side "left")
-;  (bar :screen 1))
+(defwindow bar_2
+ :monitor "HDMI-1-0"
+ :geometry (geometry :x 1872 :y 4 :width "55px" :height "1072px")
+ :anchor "top right"
+ :reserve (struts :distance "50px" :side "right")
+ (bar_2 :screen 1))
 
 ; Wifi info
 (defpoll network_data :interval "5s"
@@ -261,18 +316,18 @@
 (defwindow volume_popup
   :monitor "eDP-1"
   :anchor "bottom left" 
-  :geometry (geometry :x "50px" :y "1285px" :height "100px" :width "40px")
+  :geometry (geometry :x "50px" :y "1235px" :height "100px" :width "40px")
   (volume-popup))
 
 ; Brightness bar
 (defwidget brighness-popup []
   (eventbox :onhoverlost "eww close brightness_popup"
-            :vexpand true
+            :vexpand "true"
             :valign "fill"
     (box :class "volume-metric"
        :orientation "v"
        :valign "fill"
-       :vexpand false
+       :vexpand "false"
        :width 40
       (scale :orientation "v"
             :min 0
@@ -284,5 +339,25 @@
 (defwindow brightness_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "50px" :y "1365px" :height "100px" :width "40px")
+  :geometry (geometry :x "50px" :y "1315px" :height "100px" :width "40px")
   (brighness-popup))
+
+; Calendar
+(defwidget calendar-popup []
+  (box :class "calendar_popup"
+      :valign "fill"
+      :vexpand "true"
+    
+      (eventbox :valign "fill"
+            :vexpand "true"
+            :onhoverlost "eww close calendar_popup"
+            (calendar
+              :day day_calendar
+              :month month
+              :year year_calendar))))
+
+(defwindow calendar_popup
+  :monitor "eDP-1"
+  :anchor "bottom left"
+  :geometry (geometry :x "50px" :y "1300px" :height "200px" :width "400px")
+  (calendar-popup))

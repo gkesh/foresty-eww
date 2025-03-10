@@ -42,15 +42,15 @@
               :spacing 10
               
               (label :class "metric-icon" :text "")
-              {music_data.status == "" ? "N/A": music_data.album == "null" || music_data.album == "" ? "N/A": "${music_data.album}"})
+              {music_data.status == "" ? "Unknown Album": music_data.album == "null" || music_data.album == "" ? "Unknown Album": "${music_data.album}"})
           
           (box :orientation "h"
               :space-evenly "false"
               :class "music_text"
               :spacing 10
               
-              (label :class "metric-icon" :text "")
-              {music_data.status == "" ? "N/A": music_data.artist == "null" || music_data.artist == "" ? "N/A" : "${music_data.artist}"})
+              (label :class "metric-icon" :style "font-size: 20px; margin-right: 5px" :text "󰳩")
+              {music_data.status == "" ? "Unknown Artist": music_data.artist == "null" || music_data.artist == "" ? "N/A" : "${music_data.artist}"})
           
           (box :class "music_control"
               :orientation "h"
@@ -69,6 +69,6 @@
 (defwindow music_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "60px" :y "8px" :height "180px" :width "640px")
+  :geometry (geometry :x "60px" :y "8px" :height "190px" :width "640px")
   
   (music-popup))

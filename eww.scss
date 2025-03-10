@@ -12,6 +12,10 @@ window {
   }
 }
 
+.bar_2 {
+  margin: 5px 11px 8px 5px;
+}
+
 .workspaces {
   .workspace {
     background-color: #333333;
@@ -103,6 +107,10 @@ window {
   margin: 10px 0;
 }
 
+.metric-text {
+  font-family: "Hack Nerd Font Mono";
+}
+
 .metric-battery {
   font-family: "Hack Nerd Font";
   font-size: 1.15em;
@@ -131,7 +139,7 @@ window {
   font-weight: bold;
 }
 
-.music_popup, .control_popup {
+.music_popup, .control_popup, .calendar_popup {
   all: unset;
   background-color: #1d2021;
   border-radius: 32px;
@@ -152,8 +160,8 @@ window {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 150px;
-  min-width: 150px;
+  min-height: 160px;
+  min-width: 160px;
   margin: 20px 15px;
   border-radius: 24px;
 }
@@ -194,13 +202,19 @@ window {
 
 .control-box {
   padding: 20px;
-  background-color: #292a2b;
   border-radius: 24px;
+  background-color: #292a2b;
+}
+
+.control-event-box:hover {
+  transition: all 0.25s linear;
+  color: #687e55;
 }
 
 .rounded-button {
   border-radius: 50%;
   background-color: #687e55;
+  color: white;
   font-size: 18px;
   padding: 8px 18px 8px 14px;
 }
@@ -208,6 +222,7 @@ window {
 .rounded-button-thin {
   border-radius: 50%;
   background-color: #687e55;
+  color: white;
   font-size: 18px;
   padding: 8px 14px;
 }
@@ -224,4 +239,29 @@ window {
 
 .large-icon {
   font-size: 28px;
+}
+
+.hoverable-metric {
+  background-color: #1d2021;
+  border-radius: 8px;
+}
+
+.hoverable-label {
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.hoverable {
+  border-radius: 8px;
+  padding: 8px 0;
+}
+
+.hoverable:hover {
+  transition: all 0.25s linear;
+  background-color: #00FFA9;
+  color: black;
+}
+
+.calendar_popup {
+  padding: 18px;
 }
