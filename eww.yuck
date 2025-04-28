@@ -14,7 +14,7 @@
          :class "segment-bottom" 
       (bottom :screen screen))))
 
-(defwidget bar_2 [screen]
+(defwidget bar_min [screen]
   (centerbox :orientation "v"
     :class "bar_2"
     (box :class "segment-top"
@@ -268,6 +268,8 @@
 
 
 (defvar bluetooth_icon "")
+(defvar mode_icon "")
+(defvar mode_text "")
 (defvar kbd_icon "")
 (defvar bluetooth "")
 (defvar bluetooth_text "")
@@ -287,7 +289,7 @@
  :geometry (geometry :x 1872 :y 4 :width "55px" :height "1072px")
  :anchor "top right"
  :reserve (struts :distance "50px" :side "right")
- (bar_2 :screen 1))
+ (bar_min :screen 1))
 
 ; Wifi info
 (defpoll network_data :interval "5s"

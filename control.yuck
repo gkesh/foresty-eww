@@ -38,13 +38,16 @@
                     :space-evenly "false"
                     :spacing 4
                 
-                (label :class "rounded-label"
-                        :halign "start"
-                        :text "WiFi/LAN")
-                
-                (label :class "rounded-sub-label"
-                        :halign "start"
-                :text "${network_data.ap}"))))
+                    (label :class "rounded-label"
+                            :halign "start"
+                            :text "WiFi/LAN")
+                    
+                    (label :class "rounded-sub-label"
+                            :halign "start"
+                    :text "${network_data.ap}")
+                )
+            )
+        )
 
         (eventbox :class "control-event-box" 
             :cursor "pointer"
@@ -74,13 +77,16 @@
                     :space-evenly "false"
                     :spacing 4
                 
-                (label :class "rounded-label"
-                        :halign "start"
-                        :text "Bluetooth")
-                
-                (label :class "rounded-sub-label"
-                        :halign "start"
-                :text "${bluetooth_text}"))))
+                    (label :class "rounded-label"
+                            :halign "start"
+                            :text "Bluetooth")
+                    
+                    (label :class "rounded-sub-label"
+                            :halign "start"
+                    :text "${bluetooth_text}")
+                )
+            )
+        )
 
         (eventbox :class "control-event-box" 
             :cursor "pointer"
@@ -115,7 +121,12 @@
                     
                     (label :class "rounded-sub-label"
                             :halign "start"
-                            :text "Turned Off"))))))
+                            :text "Turned Off")
+                )
+            )
+        )
+    )
+)
 
 (defwidget keyboard-button []
     ; Keyboard & Screenshot
@@ -148,7 +159,11 @@
                 
                 (label :class "rounded-label"
                     :halign "center"
-                    :text "${kb_label}")))))
+                    :text "${kb_label}")
+            )
+        )
+    )
+)
 
 (defwidget screenshot-button []
     (box :class "control-box"
@@ -158,30 +173,212 @@
     :vexpand "false"
     :spacing 18
 
-    (eventbox :class "control-event-box" 
-        :cursor "pointer"
-        :onrightclick ""
-        :vexpand "false"
-        :valign "fill"
-        :hexpand "true"
-        :halign "center"
-        :onclick "eww close control_popup && sleep 1 && flameshot gui &"
-    
-        (box :orientation "v" 
-            :valign "center"
+        (eventbox :class "control-event-box" 
+            :cursor "pointer"
+            :onrightclick ""
             :vexpand "false"
-            :halign "center"
+            :valign "fill"
             :hexpand "true"
-            :space-evenly "false"
-            :spacing 4
-            
-            (label :class "large-icon"
-                :style "margin-left: -4px"
-                :text "")
-            
-            (label :class "rounded-label"
+            :halign "center"
+            :onclick "eww close control_popup && sleep 1 && flameshot gui &"
+        
+            (box :orientation "v" 
+                :valign "center"
+                :vexpand "false"
                 :halign "center"
-                :text "Screenshot")))))
+                :hexpand "true"
+                :space-evenly "false"
+                :spacing 4
+                
+                (label :class "large-icon"
+                    :style "margin-left: -4px"
+                    :text "")
+                
+                (label :class "rounded-label"
+                    :halign "center"
+                    :text "Screenshot")
+            )
+        )
+    )
+)
+
+(defwidget power-buttons []
+    (box :class "power-buttons"
+        :orientation "h"
+        :valign "fill"
+        :vexpand "false"
+        :space-evenly "false"
+        :spacing 16
+
+        (box :class "control-box"
+            :tooltip "Logout"
+            :space-evenly "false"
+            :valign "fill"
+            :vexpand "false"
+            :halign "fill"
+            :hexpand "true"
+            :spacing 16
+
+            (eventbox :class "logout-button"
+                :cursor "pointer"
+                :onrightclick ""
+                :vexpand "false"
+                :valign "fill"
+                :hexpand "true"
+                :halign "center"
+                :onmiddleclick "logout"
+            
+                (box :orientation "h" 
+                    :valign "center"
+                    :vexpand "false"
+                    :halign "center"
+                    :hexpand "true"
+                    :space-evenly "false"
+                    :spacing 4
+
+                    (label :class "large-icon"
+                        :text " ")
+
+                    (label :class "large-icon"
+                        :text " ")
+                    
+                    (label :class "large-icon"
+                        :text " 󰠜 ")
+                    
+                    ; (label :class "rounded-label"
+                    ;     :halign "center"
+                    ;     :text "Logout")
+                )
+            )
+        )
+
+        (box  :class "control-box"
+            :tooltip "Shutdown"
+            :space-evenly "false"
+            :valign "fill"
+            :vexpand "false"
+            :halign "fill"
+            :hexpand "true"
+            :spacing 16
+
+            (eventbox :class "power-button"
+                :cursor "pointer"
+                :onrightclick ""
+                :vexpand "false"
+                :valign "fill"
+                :hexpand "true"
+                :halign "center"
+                :onmiddleclick "shutdown -P now"
+            
+                (box :orientation "h" 
+                    :valign "center"
+                    :vexpand "false"
+                    :halign "center"
+                    :hexpand "true"
+                    :space-evenly "false"
+                    :spacing 4
+
+                    (label :class "large-icon"
+                        :text " ")
+
+                    (label :class "large-icon"
+                        :text " ")
+                    
+                    (label :class "large-icon"
+                        :text "  ")
+                    
+                    ; (label :class "rounded-label"
+                    ;     :halign "center"
+                    ;     :text "Shutdown")
+                )
+            )
+        )
+
+        (box  :class "control-box"
+            :tooltip "Restart"
+            :space-evenly "false"
+            :valign "fill"
+            :vexpand "false"
+            :halign "fill"
+            :hexpand "true"
+            :spacing 16
+
+            (eventbox :class "restart-button"
+                :cursor "pointer"
+                :onrightclick ""
+                :vexpand "false"
+                :valign "fill"
+                :hexpand "true"
+                :halign "center"
+                :onmiddleclick "reboot -f"
+            
+                (box :orientation "h" 
+                    :valign "center"
+                    :vexpand "false"
+                    :halign "center"
+                    :hexpand "true"
+                    :space-evenly "false"
+                    :spacing 4
+
+                    (label :class "large-icon"
+                        :text " ")
+
+                    (label :class "large-icon"
+                        :text " ")
+                    
+                    (label :class "large-icon"
+                        :text "  ")
+                    
+                    ; (label :class "rounded-label"
+                    ;     :halign "center"
+                    ;     :text "Restart")
+                )
+            )
+        )
+
+        (box  :class "control-box"
+            :tooltip mode_text
+            :space-evenly "false"
+            :valign "fill"
+            :vexpand "false"
+            :halign "fill"
+            :hexpand "true"
+            :spacing 16
+
+            (eventbox :class "restart-button"
+                :cursor "pointer"
+                :onrightclick ""
+                :vexpand "false"
+                :valign "fill"
+                :hexpand "true"
+                :halign "center"
+                :onclick "./scripts/toggle-performance-mode.sh"
+            
+                (box :orientation "h" 
+                    :valign "center"
+                    :vexpand "false"
+                    :halign "center"
+                    :hexpand "true"
+                    :space-evenly "false"
+                    :spacing 4
+
+                    (label :class "large-icon"
+                        :text " ")
+
+                    (label :class "large-icon"
+                        :text " ")
+                    
+                    (label :class "large-icon"
+                        :text mode_icon)
+                    
+                    ; (label :class "rounded-label"
+                    ;     :halign "center"
+                    ;     :text "Eco Mode")
+                )
+            )
+        )
+    )
+)
 
 (defwidget mic-button []
     (box :class "control-box"
@@ -212,7 +409,11 @@
                 
                 (label :class "rounded-label"
                     :halign "center"
-                    :text "Microphone")))))
+                    :text "Microphone")
+            )
+        )
+    )
+)
 
 (defwidget camera-button []
     (box :class "control-box"
@@ -222,29 +423,33 @@
     :vexpand "false"
     :spacing 18
 
-    (eventbox :class "control-event-box" 
-        :cursor "pointer"
-        :onrightclick ""
-        :vexpand "false"
-        :valign "fill"
-        :hexpand "true"
-        :halign "center"
-    
-        (box :orientation "v" 
-            :valign "center"
+        (eventbox :class "control-event-box" 
+            :cursor "pointer"
+            :onrightclick ""
             :vexpand "false"
-            :halign "center"
+            :valign "fill"
             :hexpand "true"
-            :space-evenly "false"
-            :spacing 4
-            
-            (label :class "large-icon"
-                :style "margin-left: -4px"
-                :text "󰻃")
-            
-            (label :class "rounded-label"
+            :halign "center"
+        
+            (box :orientation "v" 
+                :valign "center"
+                :vexpand "false"
                 :halign "center"
-                :text "Screencap")))))
+                :hexpand "true"
+                :space-evenly "false"
+                :spacing 4
+                
+                (label :class "large-icon"
+                    :style "margin-left: -4px"
+                    :text "󰻃")
+                
+                (label :class "rounded-label"
+                    :halign "center"
+                    :text "Screencap")
+            )
+        )
+    )
+)
 
 (defwidget control-popup []
     (box :orientation "v" 
@@ -262,12 +467,18 @@
             :hexpand "false"
             :halign "fill"
 
-            (box :orientation "h"
+            (box :orientation "v"
                 :valign "fill"
                 :vexpand "false"
                 :space-evenly "false"
                 :spacing 16
-            
+
+                (box :orientation "h"
+                    :valign "fill"
+                    :vexpand "false"
+                    :space-evenly "false"
+                    :spacing 16
+                
                     (connection-box)
                     
                     (box :orientation "v"
@@ -277,7 +488,8 @@
                     :spacing 16
                         (keyboard-button)
 
-                        (screenshot-button))
+                        (screenshot-button)
+                    )
                     
                     (box :orientation "v"
                     :valign "fill"
@@ -288,7 +500,15 @@
                         ; Camera and Mic
                         (mic-button)    
 
-                        (camera-button))))))
+                        (camera-button)
+                    )
+                )
+
+                (power-buttons)
+            )
+        )
+    )
+)
 
 ; Control Bar
 (defwindow control_popup
@@ -296,4 +516,5 @@
     :anchor "bottom left"
     :geometry (geometry :x "60px" :y "952px" :height "640px" :width "520px")
   
-    (control-popup))
+    (control-popup)
+)
