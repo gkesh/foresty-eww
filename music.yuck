@@ -1,9 +1,25 @@
 ; Music Widget
-(defpoll music_data :interval "0.5s"
-  :initial `{"status": ""}`
-  `
-  playerctl metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "album": "{{album}}", "title": "{{title}}", "artUrl": "{{mpris:artUrl}}"}' || echo '{"status": ""}';
-  `)
+; (defpoll music_data :interval "1s"
+;   :initial `{"status": ""}`
+;   `
+;   playerctl metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "album": "{{album}}", "title": "{{title}}", "artUrl": "{{mpris:artUrl}}"}' || echo '{"status": ""}';
+;   `)
+
+(defpoll music_data :interval "1s" 
+  :initial `{"status": ""}` 
+  `playerctl metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "album": "{{album}}", "title": "{{title}}", "artUrl": "{{mpris:artUrl}}", "position": "{{position}}", "length": "{{mpris:length}}" }' || echo '{"status": ""}'; `)
+
+(defvar format-time `function(us) {
+  if (us == null || us == 0) return "00:00:00";
+  const totalSeconds = Math.floor(us / 1000000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return hours.toString().padStart(2, '0') + ':' + 
+         minutes.toString().padStart(2, '0') + ':' + 
+         seconds.toString().padStart(2, '0');
+}`)
+
 
 (defwidget music-popup []
   (box :halign "fill"
@@ -16,10 +32,11 @@
               :hexpand "false"
               :halign "fill"
 
-      (box :orientation "h" 
+      (box :orientation "v" 
            :valign "fill"
            :vexpand "false"
            :space-evenly "false"
+           :class "music_container"
            :spacing 10
 
         (box :class "music_album_art" :vexpand "false" :hexpand "false" :style {music_data.status == "" || music_data.artUrl == "" ? "background-image: url('./assets/music_placeholder.jpeg');": "background-image: url('${music_data.artUrl}');"})
@@ -30,32 +47,65 @@
             :vexpand "false"
             :hexpand "false"
             
-          (label :halign "start"
+          (label :halign "center"
                 :class "music_title"
                 :wrap "true"
-                :limit-width 35
+                :justify "center"
+                :limit-width 100
                 :text {music_data.status == "" ? "No music playing": "${music_data.title}"})
+          
+          (label :halign "center"
+                :class "music_artist"
+                :wrap "true"
+                :limit-width 50
+                :text {music_data.status == "" ? "Unknown Artist": music_data.artist == "null" || music_data.artist == "" ? "Unknown Artist" : "${music_data.artist}"})
 
-          (box :orientation "h"
-              :space-evenly "false"
-              :class "music_text"
-              :spacing 10
+          ; (box :orientation "h"
+          ;     :space-evenly "false"
+          ;     :class "music_text"
+          ;     :spacing 10
               
-              (label :class "metric-icon" :text "")
-              {music_data.status == "" ? "Unknown Album": music_data.album == "null" || music_data.album == "" ? "Unknown Album": "${music_data.album}"})
+          ;     (label :class "metric-icon" :text "")
+          ;     {music_data.status == "" ? "Unknown Album": music_data.album == "null" || music_data.album == "" ? "Unknown Album": "${music_data.album}"})
           
-          (box :orientation "h"
-              :space-evenly "false"
-              :class "music_text"
-              :spacing 10
+          ; (box :orientation "h"
+          ;     :space-evenly "false"
+          ;     :class "music_text"
+          ;     :spacing 10
               
-              (label :class "metric-icon" :style "font-size: 20px; margin-right: 5px" :text "󰳩")
-              {music_data.status == "" ? "Unknown Artist": music_data.artist == "null" || music_data.artist == "" ? "N/A" : "${music_data.artist}"})
+          ;     (label :class "metric-icon" :style "font-size: 20px; margin-right: 5px" :text "󰳩")
+          ;     {music_data.status == "" ? "Unknown Artist": music_data.artist == "null" || music_data.artist == "" ? "N/A" : "${music_data.artist}"})
           
+          (box :class "music-progress-container"
+              :orientation "v"
+              :space-evenly false
+              :spacing 8
+            ; Time labels
+            (box :class "music-time-labels"
+                :orientation "h"
+                :space-evenly false
+              (label :class "music-time-current"
+                    :halign "start"
+                    :hexpand true
+                    :text {music_data.status == "" ? "00:00:00" : "${round(music_data.position / 3600000000, 0) < 10 ? '0' : ''}${round(music_data.position / 3600000000, 0)}:${round((music_data.position / 60000000) % 60, 0) < 10 ? '0' : ''}${round((music_data.position / 60000000) % 60, 0)}:${round((music_data.position / 1000000) % 60, 0) < 10 ? '0' : ''}${round((music_data.position / 1000000) % 60, 0)}"})
+              (label :class "music-time-total"
+                    :halign "end"
+                    :hexpand true
+                    :text {music_data.status == "" ? "00:00:00" : "${round(music_data.length / 3600000000, 0) < 10 ? '0' : ''}${round(music_data.length / 3600000000, 0)}:${round((music_data.length / 60000000) % 60, 0) < 10 ? '0' : ''}${round((music_data.length / 60000000) % 60, 0)}:${round((music_data.length / 1000000) % 60, 0) < 10 ? '0' : ''}${round((music_data.length / 1000000) % 60, 0)}"}))
+            
+            ; Progress bar
+            (box :class "music-progress-bar"
+              (scale :class "music-progress-bar"
+                    :value {music_data.status == "" || music_data.length == "0" || music_data.length == "" ? 0 : (music_data.position / music_data.length) * 100}
+                    :min 0
+                    :max 100
+                    :timeout "1s"
+                    :onchange "playerctl position $(echo '{} * ${music_data.length} / 100 / 1000000' | bc -l)")))
+
           (box :class "music_control"
               :orientation "h"
               :space-evenly "true"
-              :halign "start"
+              :halign "center"
               :spacing 20
               
               (button :class "music_control_button" :onclick "playerctl previous" "")
@@ -69,6 +119,6 @@
 (defwindow music_popup
   :monitor "eDP-1"
   :anchor "bottom left"
-  :geometry (geometry :x "60px" :y "8px" :height "190px" :width "640px")
+  :geometry (geometry :x "60px" :y "8px" :height "190px" :width "450px")
   
   (music-popup))

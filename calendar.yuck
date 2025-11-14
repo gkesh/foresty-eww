@@ -1,0 +1,138 @@
+;; Calendar
+(defpoll weather :interval "5s" :initial "{\"temperature\": \"N/A\", \"condition\": \"N/A\", \"humidity\": \"N/A\", \"location\": \"N/A\", \"image\": \"/home/gkesh/.config/assets/weather/day_sunny.png\"}" "bash /home/gkesh/.config/eww/scripts/get-weather.sh")
+
+(defwidget sunrise-sunset []
+  (box :class "sun-times-widget"
+       :orientation "h"
+       :space-evenly false
+       :halign "fill"
+       :valign "center"
+    
+    ; Sunrise section
+    (box :class "sunrise-section"
+         :orientation "h"
+         :space-evenly false
+         :spacing 20
+         :halign "start"
+         :hexpand true
+         :valign "center"
+      
+      (label :class "sun-icon sunrise-icon"
+             :text "")
+      
+      (box :class "sun-info sunrise-info"
+           :orientation "v"
+           :space-evenly false
+           :spacing 2
+           :valign "center"
+        
+        (label :class "sun-label"
+               :text "Sunrise"
+               :halign "start")
+        
+        (label :class "sun-time"
+               :text "${sun_time.sunrise}"
+               :halign "start")))
+    
+    ; Sunset section
+    (box :class "sunset-section"
+         :orientation "h"
+         :space-evenly false
+         :spacing 12
+         :halign "end"
+         :hexpand true
+         :valign "center"
+      
+      (box :class "sun-info"
+           :orientation "v"
+           :space-evenly false
+           :spacing 2
+           :valign "center"
+        
+        (label :class "sun-label"
+               :text "Sunset"
+               :halign "end")
+        
+        (label :class "sun-time"
+               :text "${sun_time.sunset}"
+               :halign "end"))
+      
+      (label :class "sun-icon sunset-icon"
+             :text ""))))
+
+
+(defwidget calendar-popup []
+  (box :class "calendar_popup"
+       :orientation "v"
+       :space-evenly false
+       :valign "fill"
+       :vexpand "true"
+    (eventbox :valign "fill"
+              :vexpand "true"
+              :onhoverlost "eww close calendar_popup"
+      (box :orientation "v"
+           :space-evenly false
+           :valign "start"
+           :vexpand false
+           :spacing 15
+        
+        ; Date Section
+        (box :orientation "v"
+             :class "date_section"
+             :space-evenly false
+             :spacing 5
+          (label :halign "start"
+                 :class "calendar_title"
+                 :wrap "true"
+                 :limit-width 35
+                 :text "Today is ${day_name}")
+          (label :halign "start"
+                 :class "calendar_subtitle"
+                 :wrap "true"
+                 :limit-width 35
+                 :text "${month_name} ${day}, ${year_calendar}"))
+        
+        (sunrise-sunset)
+        
+        ; Weather Section
+        (box :orientation "v"
+             :class "weather_section"
+             :style "background-image: url('${weather.image}')"
+             :space-evenly false
+             :spacing 8
+          
+          (box :orientation "h"
+               :class "weather_item"
+               :space-evenly false
+               :spacing 8
+            (label :class "weather_temp"
+                   :halign "start"
+                   :text "${weather.temperature}"))
+          
+          (box :orientation "v"
+               :class "weather_item"
+               :space-evenly false
+               :spacing 0
+               (label :class "weather_info"
+                   :halign "start"
+                   :text "Location: ${weather.location}")
+               (label :class "weather_info"
+                   :halign "start"
+                   :text "Condition: ${weather.condition}")
+               (label :class "weather_info"
+                   :halign "start"
+                   :text "Humidity: ${weather.humidity}")))
+        
+        ; Calendar Widget
+        (calendar :day day_calendar
+                  :month month_calendar
+                  :year year_calendar)))))
+
+(defwindow calendar_popup
+  :monitor "eDP-1"
+  :geometry (geometry :x "60px" 
+                      :y "795px"
+                      :width "350px" 
+                      :height "500px")
+  :anchor "bottom left"
+  (calendar-popup))

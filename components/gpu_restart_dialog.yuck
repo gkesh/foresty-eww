@@ -1,0 +1,43 @@
+(defwidget gpu-dialog-box []
+  (box :class "dialog-overlay"
+       :orientation "v"
+       :space-evenly false
+       :valign "center"
+       :halign "center"
+    (box :class "dialog-container"
+         :orientation "v"
+         :space-evenly false
+         :spacing 24
+      ; Header Section
+      (box :class "dialog-header"
+           :orientation "v"
+           :space-evenly false
+           :spacing 8
+        (label :class "dialog-title"
+               :text "Restart Required"
+               :halign "center")
+        (label :class "dialog-subtitle"
+               :text "To make these changes you need to restart your system, would you like to go ahead right now?"
+               :wrap true
+               :halign "center"))
+      
+      ; Button Section
+      (box :class "dialog-buttons"
+           :orientation "h"
+           :space-evenly false
+           :spacing 12
+           :halign "center"
+        (button :class "dialog-button dialog-button-confirm"
+                :onclick "eww close dialog && systemctl reboot"
+                "Yes, do it!")
+        (button :class "dialog-button dialog-button-cancel"
+                :onclick "eww close dialog"
+                "I will do it later")))))
+
+(defwindow gpu-restart-dialog
+  :monitor "eDP-1"
+  :stacking "overlay"
+  :focusable true
+  :geometry (geometry :width "100%" 
+                      :height "100%")
+  (gpu-dialog-box))

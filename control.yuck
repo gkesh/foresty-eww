@@ -1,5 +1,3 @@
-(defvar kb_label "Keyboard")
-
 (defwidget connection-box []
     ; Connections Boxes
     (box :class "control-box"
@@ -327,7 +325,7 @@
                         :text " ")
                     
                     (label :class "large-icon"
-                        :text "  ")
+                        :text " 󰸳 ")
                     
                     ; (label :class "rounded-label"
                     ;     :halign "center"
@@ -352,7 +350,7 @@
                 :valign "fill"
                 :hexpand "true"
                 :halign "center"
-                :onclick "./scripts/toggle-performance-mode.sh"
+                :onmiddleclick "qtile cmd-obj -o cmd -f reload_config"
             
                 (box :orientation "h" 
                     :valign "center"
@@ -369,7 +367,7 @@
                         :text " ")
                     
                     (label :class "large-icon"
-                        :text mode_icon)
+                        :text "  ")
                     
                     ; (label :class "rounded-label"
                     ;     :halign "center"
@@ -377,6 +375,48 @@
                 )
             )
         )
+
+        ; (box  :class "control-box"
+        ;     :tooltip mode_text
+        ;     :space-evenly "false"
+        ;     :valign "fill"
+        ;     :vexpand "false"
+        ;     :halign "fill"
+        ;     :hexpand "true"
+        ;     :spacing 16
+
+        ;     (eventbox :class "restart-button"
+        ;         :cursor "pointer"
+        ;         :onrightclick ""
+        ;         :vexpand "false"
+        ;         :valign "fill"
+        ;         :hexpand "true"
+        ;         :halign "center"
+        ;         :onclick "./scripts/toggle-performance-mode.sh"
+            
+        ;         (box :orientation "h" 
+        ;             :valign "center"
+        ;             :vexpand "false"
+        ;             :halign "center"
+        ;             :hexpand "true"
+        ;             :space-evenly "false"
+        ;             :spacing 4
+
+        ;             (label :class "large-icon"
+        ;                 :text " ")
+
+        ;             (label :class "large-icon"
+        ;                 :text " ")
+                    
+        ;             (label :class "large-icon"
+        ;                 :text mode_icon)
+                    
+        ;             ; (label :class "rounded-label"
+        ;             ;     :halign "center"
+        ;             ;     :text "Eco Mode")
+        ;         )
+        ;     )
+        ; )
     )
 )
 
@@ -451,6 +491,176 @@
     )
 )
 
+(defpoll volume :interval "1s" :initial "0" 'zsh /home/gkesh/.config/eww/scripts/get-volume.sh')
+(defpoll brightness_percent :interval "1s" :initial "0" '/home/gkesh/.config/eww/scripts/get-brightness.sh')
+
+(defwidget audio-brightness-controls []
+    (box :class "control-box"
+        :orientation "v"
+        :valign "fill"
+        :vexpand "false"
+        :hexpand "true"
+        :space-evenly "false"
+
+        (box :orientation "h"
+            :valign "center"
+            :halign "fill"
+            :vexpand false
+            :space-evenly false
+            :style "padding: 0px 5px;"
+            (label :class "metric-icon"
+                    :halign "start"
+                    :text "Volume")
+            (label :class "metric-text" 
+                    :halign "end"
+                    :hexpand true
+                    :text "${volume}"))
+        
+        (box :class "volume-metric round"
+            :orientation "v"
+            :vexpand "false"
+            :valign "center"
+            :hexpand "true"
+            :halign "fill"
+            :space-evenly "false"
+            (overlay
+                (scale :class "vb-scale"
+                    :orientation "h"
+                    :min 0
+                    :max 100
+                    :width 400
+                    :value volume
+                    :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%")
+                (label
+                    :valign "center"
+                    :halign "start"
+                    :style "margin-left: 15px; color: #1e1e2e; font-size: 24px;"
+                    :text "󱄠")))
+
+        (box :orientation "h"
+            :valign "center"
+            :halign "fill"
+            :vexpand false
+            :space-evenly false
+            :style "margin-top: 12px; padding: 0px 5px;"
+            (label :class "metric-icon"
+                    :halign "start"
+                    :text "Brightness")
+            (label :class "metric-text"
+                    :halign "end"
+                    :hexpand true
+                    :text "${brightness_percent}"))
+
+        ; Brightness Control
+        (box :class "volume-metric round"
+            :orientation "v"
+            :vexpand "false"
+            :valign "center"
+            :hexpand "true"
+            :halign "fill"
+            :space-evenly "false"
+            (overlay
+                (scale :class "vb-scale"
+                    :orientation "h"
+                    :min 0
+                    :max 100
+                    :width 400
+                    :value brightness_percent
+                    :onchange "xbacklight -set {}")
+                (label
+                    :valign "center"
+                    :halign "start"
+                    :style "margin-left: 15px; color: #1e1e2e; font-size: 20px;"
+                    :text "󰃝")))
+    )
+)
+
+(defwidget performance-mode-buttons []
+    (box :class "control-box"
+        :orientation "h"
+        :valign "fill"
+        :vexpand "false"
+        :space-evenly "false"
+        :spacing 16
+
+        ; CPU Performance Mode Toggle
+        (eventbox :class "control-event-box"
+            :cursor "pointer"
+            :vexpand "false"
+            :valign "fill"
+            :hexpand "true"
+            :halign "fill"
+            :onclick "./scripts/toggle-gpu-mode.sh"
+
+            (box :orientation "h" 
+                :valign "fill"
+                :vexpand "false"
+                :space-evenly "false"
+                :spacing 24
+            
+                (button :class "rounded-button"
+                        :onclick ""
+                        (label :text "${gpu_mode_icon}"))
+
+                (box :orientation "v" 
+                    :valign "center"
+                    :vexpand "false"
+                    :halign "start"
+                    :hexpand "false"
+                    :space-evenly "false"
+                    :spacing 4
+                
+                    (label :class "rounded-label"
+                            :halign "start"
+                            :text "${gpu_mode_text}")
+                    
+                    (label :class "rounded-sub-label"
+                            :halign "start"
+                            :text "GPU Mode")
+                )
+            )
+        )
+
+        ; GPU Performance Mode Toggle
+        (eventbox :class "control-event-box"
+            :cursor "pointer"
+            :vexpand "false"
+            :valign "fill"
+            :hexpand "true"
+            :halign "fill"
+            :onclick "./scripts/toggle-cpu-mode.sh"
+
+            (box :orientation "h" 
+                :valign "fill"
+                :vexpand "false"
+                :space-evenly "false"
+                :spacing 24
+            
+                (button :class "rounded-button"
+                        :onclick ""
+                        (label :text "${mode_icon}"))
+
+                (box :orientation "v" 
+                    :valign "center"
+                    :vexpand "false"
+                    :halign "start"
+                    :hexpand "false"
+                    :space-evenly "false"
+                    :spacing 4
+                
+                    (label :class "rounded-label"
+                            :halign "start"
+                            :text "${mode_text}")
+                    
+                    (label :class "rounded-sub-label"
+                            :halign "start"
+                            :text "CPU Mode")
+                )
+            )
+        )
+    )
+)
+
 (defwidget control-popup []
     (box :orientation "v" 
         :halign "fill"
@@ -504,17 +714,22 @@
                     )
                 )
 
+                (audio-brightness-controls)
+
                 (power-buttons)
+
+                (performance-mode-buttons)
             )
         )
     )
 )
 
+
 ; Control Bar
 (defwindow control_popup
     :monitor "eDP-1"
     :anchor "bottom left"
-    :geometry (geometry :x "60px" :y "952px" :height "640px" :width "520px")
+    :geometry (geometry :x "60px" :y "924px" :height "650px" :width "520px")
   
     (control-popup)
 )
